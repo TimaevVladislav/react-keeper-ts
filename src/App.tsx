@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from "react"
+
+import {Header} from "./components/Header"
+import {Footer} from "./components/Footer"
+import {CreateArea} from "./components/CreateArea"
+import {Note} from "./components/Note"
+import data from "./data/notes"
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [notes, setNotes] = useState(data)
+
+    const addHandler = (newNote: any) => setNotes(prevNote => ([ ...prevNote, newNote ]))
+
+    const deleteHandler = (id: number) => {
+        setNotes((prevNotes: any) =>  prevNotes.filter((note: any, index: number) => index !== id))
+    }
+
+    return (
+    <>
+      <Header />
+      <CreateArea addHandler={addHandler} />
+        {notes.map((note, index) => (
+            <Note
+                key={index}
+                id={index}
+                title={note.title}
+                content={note.content}
+                deleteHandler={deleteHandler}
+            />
+        ))}
+      <Footer />
+    </>
+  )
 }
 
-export default App;
+export default App
